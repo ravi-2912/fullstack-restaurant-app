@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+    <title>Restauant App</title>
+    <body/>
+        <h1>
+            {% if op == "add" %}
+                Add
+            {% elif op == "edit" %}
+                Edit
+            {% else %}
+                Delete
+            {% endif %}
+            Restaurant
+        </h1>
+        {% if restaurant %}
+            <h2>{{restaurant.name}}</h2>
+        {% endif %}
+        {% if op == "add" %}
+            <form action="{{url_for('newRestaurant', r_id=restaurant.id)}}" method="POST">
+                <p>Name:</p>
+                <input type="text" size="30" name="name">
+                <button type="submit" name="action" value="CREATE">Submit</button>
+                <button type="submit" name="action" value="CANCEL">Cancel</button>
+            </form>
+        {% elif op == "edit" %}
+            <form action="{{url_for('editRestaurant', r_id=restaurant.id)}}" method="POST">
+                <p>Name:</p>
+                <input type="text" size="30" name="name">
+                <button type="submit" name="action" value="UPDATE">Submit</button>
+                <button type="submit" name="action" value="CANCEL">Cancel</button>
+            </form>
+        {% else %}
+            <form action="{{url_for('deleteRestaurant', r_id=restaurant.id)}}" method="POST">
+                <button type="submit" name="action" value="DELETE">Delete</button>
+                <button type="submit"name = "action" value="CANCEL">Cancel</button>
+            </form>
+            {% endif %}
+        </form>
+    </body>
+</html>

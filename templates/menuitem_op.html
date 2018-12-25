@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+    <title>Restauant App</title>
+    <body/>
+        <h1>{{restaurant.name}}</h1>
+        <h2>
+            {% if op == "add" %}
+                Add
+            {% elif op == "edit" %}
+                Edit
+            {% else %}
+                Delete
+            {% endif %}
+            Menu Item: {{menu_item.name}}
+        </h2>
+        {% if op == "add" %}
+            <form action="{{url_for('newMenuItem', r_id=restaurant.id)}}" method="POST">
+                <p>
+                    Name:<input type="text" size="30" name="name"><br>
+                    Course:<input type="select" size="20" name="course"><br>
+                    Price:<input type="text" size="20" name="price">$<br>
+                    Description::<input type="textarea" size="40" name="description"><br>
+                </p>
+                <button type="submit" name="action" value="CREATE">Submit</button>
+                <button type="submit" name="action" value="CANCEL">Cancel</button>
+            </form>
+        {% elif op == "edit" %}
+            <form action="{{url_for('editMenuItem', r_id=restaurant.id, m_id=menu_item.id)}}" method="POST">
+                <p>
+                    New Name:<input type="text" size="30" name="name" value="{{menu_item.name}}"><br>
+                    New Course:<input type="text" size="20" name="course" value="{{menu_item.course}}"><br>
+                    New Price:<input type="text" size="20" name="price" value="{{menu_item.price}}"><br>
+                    New Description::<input type="text" size="40" name="description" value="{{menu_item.description}}"><br>
+                </p>
+                <button type="submit" name="action" value="UPDATE">Submit</button>
+                <button type="submit" name="action" value="CANCEL">Cancel</button>
+            </form>
+        {% else %}
+            <form action="{{url_for('deleteMenuItem', r_id=restaurant.id, m_id=menu_item.id)}}" method="POST">
+                <button type="submit" name="action" value="DELETE">Delete</button>
+                <button type="submit" name="action" value="CANCEL">Cancel</button>
+            </form>
+        {% endif %}
+    </body>
+</html>
