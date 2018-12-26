@@ -52,20 +52,14 @@
             </div>
         </div>
         <div class="row">
-
             <section class="col-md-9 pl-0">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <h1 class="display-4">{{restaurant.name}}</h1>
-                        </div>
-                    </div>
                     {% for c in courses %}
-                    <div class="row">
-                        <div class="col-12">
-                            <h3>{{c}}</h3>
+                        <div class="row">
+                            <div class="col-12">
+                                <h3>{{c}}</h3>
+                            </div>
                         </div>
-                    </div>
                         {% for i in items %}
                             {% if i.course == c %}
                                 <div class="row">
