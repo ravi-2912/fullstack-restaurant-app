@@ -1,26 +1,97 @@
 <!DOCTYPE html>
-    <title>Restauant App</title>
-    <body/>
-        <h1>{{restaurant.name}}</h1>
-        <h2>Menu Item</h2>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul>
-                    {% for m in messages %}
-                        <li><strong>{{m}}</strong></li>
-                    {% endfor %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Restaurant App</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{url_for('restaurant')}}">Restaurant App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('restaurant')}}">Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{url_for('restaurantMenuItem', r_id=restaurant.id)}}">{{restaurant.name}}</a>
+                    </li>
                 </ul>
-            {% endif %}
-        {% endwith %}
-        <p><a href="{{url_for('newMenuItem', r_id=restaurant.id)}}">Add New Menu Item</a></p>
-        {% for i in  items %}
-            <p>
-                {{i.name}}<br>
-                {{i.description}}<br>
-                {{i.price}}<br>
-                <a href="{{url_for('editMenuItem', r_id=restaurant.id, m_id=i.id)}}">Edit</a>
-                <a href="{{url_for('deleteMenuItem', r_id=restaurant.id, m_id=i.id)}}">Delete</a>
-            </p>
-        {% endfor %}
-    </body>
+                <form class="form-inline mt-2 mt-md-0">
+                    <a name="" id="" class="btn btn-success" href="#" role="button">Login</a>
+                </form>
+            </div>
+        </div>
+
+    </nav>
+
+    <main role="main" class="container pt-5">
+        <div class="row">
+
+            <section class="col-md-9 pl-0">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="display-4">{{restaurant.name}}</h1>
+                        </div>
+                    </div>
+                    {% for c in courses %}
+                    <div class="row">
+                        <div class="col-12">
+                            <h3>{{c}}</h3>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <aside class="col-md-3 pl-0">
+                <button type="button" name="" id="" class="btn btn-primary mb-4 btn-lg btn-block">
+                    Add New Menu Item
+                </button>
+                <div class="card text-left">
+                    <img class="card-img-top" src="holder.js/100px180/" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title">Title</h4>
+                        <p class="card-text">Body</p>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script>
+        window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
 </html>
