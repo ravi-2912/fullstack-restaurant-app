@@ -42,7 +42,15 @@
 
     </nav>
 
-    <main role="main" class="container pt-5">
+    <main role="main" class="container mt-5 pt-5">
+        <div class="row mb-4">
+            <div class="col-md-12 col-lg-6">
+                <h1 class="display-4">{{restaurant.name}}</h1>
+            </div>
+            <div class="col-md-6 col-lg-3 add-new-link my-auto">
+                    <a name="add-new-item" id="add-new-item" class="btn btn-primary btn-lg btn-block" href="{{url_for('newMenuItem', r_id=restaurant.id)}}" role="button">Add New</a>
+            </div>
+        </div>
         <div class="row">
 
             <section class="col-md-9 pl-0">
@@ -89,9 +97,6 @@
             </section>
 
             <aside class="col-md-3 pl-0">
-                <button type="button" name="" id="" class="btn btn-primary mb-4 btn-lg btn-block">
-                    Add New Menu Item
-                </button>
                 <div class="card text-left">
                     <img class="card-img-top" src="holder.js/100px180/" alt="">
                     <div class="card-body">
