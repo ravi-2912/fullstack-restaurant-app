@@ -63,7 +63,7 @@
                         {% for i in items %}
                             {% if i.course == c %}
                                 <div class="row">
-                                    <div class="col-8">
+                                    <div class="col-md-12 col-lg-7">
                                         <p>
                                             <span class="font-weight-bold">
                                                 {{i.name}}
@@ -74,10 +74,10 @@
                                             </span>
                                         </p>
                                     </div>
-                                    <div class="col-1 text-right">
+                                    <div class="col-md-12 col-lg-2 text-right">
                                         {{i.price}}
                                     </div>
-                                    <div class="col-3 text-right">
+                                    <div class="col-md-12 col-lg-3 text-right">
                                         <a name="edit_button" id="edit_button" class="btn btn-warning" href="{{url_for('editMenuItem', r_id=restaurant.id, m_id=i.id)}}"
                                             role="button">Edit</a>
                                         <a name="delete_button" id="delete_button" class="btn btn-danger" href="{{url_for('deleteMenuItem', r_id=restaurant.id, m_id=i.id)}}"
