@@ -49,7 +49,12 @@ def deleteRestaurant(r_id):
 def restaurantMenuItem(r_id):
     r = crud.get_restaurant(r_id)
     m = crud.get_rest_menu_items(r_id)
-    return render_template("menu.html", restaurant=r, items=m)
+    courses =[]
+    for i in m:
+        courses.append(i.course)
+    courses = list(set(courses))
+
+    return render_template("menu.html", courses=courses, restaurant=r, items=m)
 
 @app.route("/restaurant/<int:r_id>/<int:m_id>/edit", methods=["GET", "POST"])
 def editMenuItem(r_id, m_id):
