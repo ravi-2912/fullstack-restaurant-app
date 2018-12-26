@@ -53,20 +53,24 @@ def restaurantMenuItem(r_id):
     for i in m:
         courses.append(i.course)
     courses = list(set(courses))
-
     return render_template("menu.html", courses=courses, restaurant=r, items=m)
 
 @app.route("/restaurant/<int:r_id>/<int:m_id>/edit", methods=["GET", "POST"])
 def editMenuItem(r_id, m_id):
     r = crud.get_restaurant(r_id)
     m = crud.get_menu_item(r.id, m_id)
+    m_all = crud.get_rest_menu_items(r_id)
+    courses = []
+    for i in m_all:
+        courses.append(i.course)
+    courses = list(set(courses))
     if request.method == "POST":
         data = request.form
         if data["action"] == "UPDATE":
             crud.update_menu_item(r.id, m.id, data["name"], data["course"], data["description"], data["price"])
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
-        return render_template("menuitem_op.html", restaurant=r, menu_item=m, op="edit")
+        return render_template("menuitem_op.html", restaurant=r, courses=courses, item=m, op="edit")
 
 @app.route("/restaurant/<int:r_id>/<int:m_id>/delete", methods=["GET", "POST"])
 def deleteMenuItem(r_id, m_id):
@@ -78,12 +82,16 @@ def deleteMenuItem(r_id, m_id):
             crud.delete_menu_item(r.id, m.id)
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
-        return render_template("menuitem_op.html", restaurant=r, menu_item=m, op="delete")
+        return render_template("menuitem_op.html", restaurant=r, item=m, op="delete")
 
 @app.route("/restaurant/<int:r_id>/new", methods=["GET", "POST"])
 def newMenuItem(r_id):
     r = crud.get_restaurant(r_id)
     m = crud.get_rest_menu_items(r_id)
+    courses =[]
+    for i in m:
+        courses.append(i.course)
+    courses = list(set(courses))
     if request.method == "POST":
         data = request.form
         if data["action"] == "CREATE":
@@ -91,7 +99,7 @@ def newMenuItem(r_id):
             flash("New menu item created!")
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
-        return render_template("menuitem_op.html", restaurant=r, menu_item='', op="add")
+        return render_template("menuitem_op.html", restaurant=r, courses=courses, item='', op="add")
 
 @app.route("/restaurant/<int:r_id>/menu/JSON", methods=["GET"])
 def getRestaurantMenuItemJSON(r_id):
