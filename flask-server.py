@@ -66,8 +66,10 @@ def editMenuItem(r_id, m_id):
     courses = list(set(courses))
     if request.method == "POST":
         data = request.form
+        print(data)
         if data["action"] == "UPDATE":
-            crud.update_menu_item(r.id, m.id, data["name"], data["course"], data["description"], data["price"])
+            item_course = data["new-course"] if data["course"] == "OTHER" else data["course"]
+            crud.update_menu_item(r.id, m.id, data["name"], item_course, data["description"], data["price"])
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
         return render_template("menuitem_op.html", restaurant=r, courses=courses, item=m, op="edit")
@@ -95,7 +97,8 @@ def newMenuItem(r_id):
     if request.method == "POST":
         data = request.form
         if data["action"] == "CREATE":
-            crud.create_menu_item(r.id, data["name"], data["description"], data["course"], data["price"])
+            item_course = data["new-course"] if data["course"] == "OTHER" else data["course"]
+            crud.create_menu_item(r.id, data["name"], data["description"], item_course, data["price"])
             flash("New menu item created!")
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
