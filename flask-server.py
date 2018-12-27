@@ -77,9 +77,10 @@ def editMenuItem(r_id, m_id):
             item_name = bleach.clean(data["name"])
             item_desc = bleach.clean(data["description"])
             item_price = bleach.clean(data["price"])
-            course = bleach.clean(data["course"])
-            new_course =bleach.clean(data["new-course"])
-            item_course = new_course if course == "OTHER" else course
+            item_course = bleach.clean(data["course"])
+            if hasattr(data, "new-course"):
+                new_course =bleach.clean(data["new-course"])
+                item_course = new_course if item_course == "OTHER" else item_course
             crud.update_menu_item(r.id, m.id, item_name, item_course, item_desc, item_price)
             flash("Menu Item {} Updated!".format(item_name))
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
@@ -114,8 +115,10 @@ def newMenuItem(r_id):
             item_desc = bleach.clean(data["description"])
             item_price = bleach.clean(data["price"])
             course = bleach.clean(data["course"])
-            new_course =bleach.clean(data["new-course"])
-            item_course = new_course if course == "OTHER" else course
+            item_course = bleach.clean(data["course"])
+            if hasattr(data, "new-course"):
+                new_course =bleach.clean(data["new-course"])
+                item_course = new_course if item_course == "OTHER" else item_course
             crud.create_menu_item(r.id, item_name, item_desc, item_course, item_price)
             flash("New Menu Item {} Created!".format(item_name))
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
