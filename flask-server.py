@@ -18,6 +18,7 @@ def newRestaurant():
     if request.method == "POST":
         # store form data
         data = request.form
+
         # check which button is clicked - either CREATE or CANCEL
         if data["action"] == "CREATE":
             # clean data
@@ -26,6 +27,7 @@ def newRestaurant():
             crud.create_restaurant(rest_data)
             # flash message to inform user
             flash("New Restaurant {} Created!".format(rest_data))
+
         # redirect to home page for both action of either CREATE or CANCEL
         return redirect(url_for('restaurant'))
     else: # else GET request
@@ -35,11 +37,13 @@ def newRestaurant():
 def editRestaurant(r_id):
     if request.method == "POST":
         data = request.form
+
         # check which button is clicked - either UPDATE or CANCEL
         if data["action"] == "UPDATE":
             rest_data = bleach.clean(data["name"])
             crud.update_restaurant_name(r_id, rest_data)
             flash("Restaurant {} Updated!".format(rest_data))
+
         return redirect(url_for('restaurant'))
     else:
         r = crud.get_restaurant(r_id)
@@ -49,11 +53,13 @@ def editRestaurant(r_id):
 def deleteRestaurant(r_id):
     if request.method == "POST":
         data = request.form
+
         # check which button is clicked - either DELETE or CANCEL
         if data["action"] == "DELETE":
             name = crud.get_restaurant(r_id)
             crud.delete_restaurant(r_id)
             flash("Restaurant {} Deleted!".format(name))
+
         return redirect(url_for('restaurant'))
     else:
         r = crud.get_restaurant(r_id)
@@ -64,13 +70,16 @@ def restaurantMenuItem(r_id):
     # read restaurant and its menu items from database
     r = crud.get_restaurant(r_id)
     m = crud.get_rest_menu_items(r_id)
+
     # collect all courses provided by restaurant
     courses =[]
     for i in m:
         # prepare a course list
         courses.append(i.course)
+
     # get unique set of courses
     courses = list(set(courses))
+
     return render_template("menu.html", courses=courses, restaurant=r, items=m)
 
 @app.route("/restaurant/<int:r_id>/<int:m_id>/edit", methods=["GET", "POST"])
@@ -87,17 +96,20 @@ def editMenuItem(r_id, m_id):
 
     if request.method == "POST":
         data = request.form
+
         # check if button submit is UPDATE or CANCEL
         if data["action"] == "UPDATE":
             item_name = bleach.clean(data["name"])
             item_desc = bleach.clean(data["description"])
             item_price = bleach.clean(data["price"])
             item_course = bleach.clean(data["course"])
-            # check if attribute "new-course" is there in data
-            if hasattr(data, "new-course"):
-                new_course =bleach.clean(data["new-course"])
+
+            # check and update the new-course to item_course
+            if item_course == "OTHER":
+                new_course = bleach.clean(data["new-course"])
                 # update the item_course to value new-course
                 item_course = new_course if item_course == "OTHER" else item_course
+
             crud.update_menu_item(r.id, m.id, item_name, item_course, item_desc, item_price)
             flash("Menu Item {} Updated!".format(item_name))
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
@@ -121,7 +133,7 @@ def deleteMenuItem(r_id, m_id):
 def newMenuItem(r_id):
     r = crud.get_restaurant(r_id)
     m = crud.get_rest_menu_items(r_id)
-    
+
     # get all courses
     courses =[]
     for i in m:
@@ -136,10 +148,12 @@ def newMenuItem(r_id):
             item_price = bleach.clean(data["price"])
             course = bleach.clean(data["course"])
             item_course = bleach.clean(data["course"])
+
             # check and update the new-course to item_course
-            if hasattr(data, "new-course"):
+            if item_course == "OTHER":
                 new_course =bleach.clean(data["new-course"])
                 item_course = new_course if item_course == "OTHER" else item_course
+
             crud.create_menu_item(r.id, item_name, item_desc, item_course, item_price)
             flash("New Menu Item {} Created!".format(item_name))
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
