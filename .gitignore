@@ -5,3 +5,4 @@ static/*
 *.db
 templates/index.html
 restaurantmenu.db-journal
+.vscode/settings.json

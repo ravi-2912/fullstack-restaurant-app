@@ -4,7 +4,7 @@
   * Routing
   * Request
   * Templates
-  * Message Flashin
+  * Message Flashing
   * REST API Endpoints
 * Data Driven and ORM
   * SQLite
@@ -23,8 +23,6 @@
 
 ### Todos
 
-* CSS Styling
-* Bleach
 * OAuth
 * Finish README
 * Cookies
