@@ -39,8 +39,21 @@
                 </form>
             </div>
         </div>
-
     </nav>
+
+    <div class="list-group-item-success container-fluid flash-message">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    {% with msg = get_flashed_messages() %}
+                        {% for m in msg %}
+                            <small>{{m}}</small>
+                        {% endfor %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
 
     <main class="container mt-5 pt-5">
         <div class="row mb-4">
