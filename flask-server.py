@@ -72,7 +72,6 @@ def editMenuItem(r_id, m_id):
     courses = list(set(courses))
     if request.method == "POST":
         data = request.form
-        print(data)
         if data["action"] == "UPDATE":
             item_name = bleach.clean(data["name"])
             item_desc = bleach.clean(data["description"])
@@ -128,7 +127,6 @@ def newMenuItem(r_id):
 @app.route("/restaurant/<int:r_id>/menu/JSON", methods=["GET"])
 def getRestaurantMenuItemJSON(r_id):
     menu_items = crud.get_rest_menu_items(r_id)
-    print(menu_items[0])
     return jsonify(MenuItems=[{
         "name":i.name,
         "price":i.price,
