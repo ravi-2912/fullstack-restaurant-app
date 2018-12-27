@@ -20,7 +20,7 @@ def newRestaurant():
         if data["action"] == "CREATE":
             rest_data = bleach.clean(data["name"])
             crud.create_restaurant(rest_data)
-            flash("New Restaurant Created!")
+            flash("New Restaurant <em>{}</em> Created!".format(rest_data))
         return redirect(url_for('restaurant'))
     else:
         return render_template("restaurant_op.html", restaurant="", op="add")
@@ -32,6 +32,7 @@ def editRestaurant(r_id):
         if data["action"] == "UPDATE":
             rest_data = bleach.clean(data["name"])
             crud.update_restaurant_name(r_id, rest_data)
+            flash("Restaurant <em>{}</em> Updated!".format(rest_data))
         return redirect(url_for('restaurant'))
     else:
         r = crud.get_restaurant(r_id)
@@ -42,7 +43,9 @@ def deleteRestaurant(r_id):
     if request.method == "POST":
         data = request.form
         if data["action"] == "DELETE":
+            name = crud.get_restaurant(r_id)
             crud.delete_restaurant(r_id)
+            flash("Restaurant <em>{}</em> Deleted!".format(name))
         return redirect(url_for('restaurant'))
     else:
         r = crud.get_restaurant(r_id)
