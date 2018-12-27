@@ -20,7 +20,7 @@ def newRestaurant():
         if data["action"] == "CREATE":
             rest_data = bleach.clean(data["name"])
             crud.create_restaurant(rest_data)
-            flash("New Restaurant <em>{}</em> Created!".format(rest_data))
+            flash("New Restaurant {} Created!".format(rest_data))
         return redirect(url_for('restaurant'))
     else:
         return render_template("restaurant_op.html", restaurant="", op="add")
@@ -32,7 +32,7 @@ def editRestaurant(r_id):
         if data["action"] == "UPDATE":
             rest_data = bleach.clean(data["name"])
             crud.update_restaurant_name(r_id, rest_data)
-            flash("Restaurant <em>{}</em> Updated!".format(rest_data))
+            flash("Restaurant {} Updated!".format(rest_data))
         return redirect(url_for('restaurant'))
     else:
         r = crud.get_restaurant(r_id)
@@ -45,7 +45,7 @@ def deleteRestaurant(r_id):
         if data["action"] == "DELETE":
             name = crud.get_restaurant(r_id)
             crud.delete_restaurant(r_id)
-            flash("Restaurant <em>{}</em> Deleted!".format(name))
+            flash("Restaurant {} Deleted!".format(name))
         return redirect(url_for('restaurant'))
     else:
         r = crud.get_restaurant(r_id)
@@ -81,6 +81,7 @@ def editMenuItem(r_id, m_id):
             new_course =bleach.clean(data["new-course"])
             item_course = new_course if course == "OTHER" else course
             crud.update_menu_item(r.id, m.id, item_name, item_course, item_desc, item_price)
+            flash("Menu Item {} Updated!".format(item_name))
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
         return render_template("menuitem_op.html", restaurant=r, courses=courses, item=m, op="edit")
@@ -93,6 +94,7 @@ def deleteMenuItem(r_id, m_id):
         data = request.form
         if data["action"] == "DELETE":
             crud.delete_menu_item(r.id, m.id)
+            flash("Menu Item {} Deleted!".format(m.name))
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
         return render_template("menuitem_op.html", restaurant=r, item=m, op="delete")
@@ -115,7 +117,7 @@ def newMenuItem(r_id):
             new_course =bleach.clean(data["new-course"])
             item_course = new_course if course == "OTHER" else course
             crud.create_menu_item(r.id, item_name, item_desc, item_course, item_price)
-            flash("New menu item created!")
+            flash("New Menu Item {} Created!".format(item_name))
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
         return render_template("menuitem_op.html", restaurant=r, courses=courses, item='', op="add")
