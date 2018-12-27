@@ -2,6 +2,7 @@
 
 from restaurant_crud import RestaurantCRUD
 from flask import Flask, render_template, request, url_for, redirect, jsonify, flash
+import bleach
 
 app = Flask(__name__)
 crud = RestaurantCRUD()
@@ -17,7 +18,8 @@ def newRestaurant():
     if request.method == "POST":
         data = request.form
         if data["action"] == "CREATE":
-            crud.create_restaurant(data["name"])
+            rest_data = bleach.clean(data["name"])
+            crud.create_restaurant(rest_data)
             flash("New Restaurant Created!")
         return redirect(url_for('restaurant'))
     else:
@@ -28,7 +30,8 @@ def editRestaurant(r_id):
     if request.method == "POST":
         data = request.form
         if data["action"] == "UPDATE":
-            crud.update_restaurant_name(r_id, data["name"])
+            rest_data = bleach.clean(data["name"])
+            crud.update_restaurant_name(r_id, rest_data)
         return redirect(url_for('restaurant'))
     else:
         r = crud.get_restaurant(r_id)
@@ -68,8 +71,13 @@ def editMenuItem(r_id, m_id):
         data = request.form
         print(data)
         if data["action"] == "UPDATE":
-            item_course = data["new-course"] if data["course"] == "OTHER" else data["course"]
-            crud.update_menu_item(r.id, m.id, data["name"], item_course, data["description"], data["price"])
+            item_name = bleach.clean(data["name"])
+            item_desc = bleach.clean(data["description"])
+            item_price = bleach.clean(data["price"])
+            course = bleach.clean(data["course"])
+            new_course =bleach.clean(data["new-course"])
+            item_course = new_course if course == "OTHER" else course
+            crud.update_menu_item(r.id, m.id, item_name, item_course, item_desc, item_price)
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
         return render_template("menuitem_op.html", restaurant=r, courses=courses, item=m, op="edit")
@@ -97,8 +105,13 @@ def newMenuItem(r_id):
     if request.method == "POST":
         data = request.form
         if data["action"] == "CREATE":
-            item_course = data["new-course"] if data["course"] == "OTHER" else data["course"]
-            crud.create_menu_item(r.id, data["name"], data["description"], item_course, data["price"])
+            item_name = bleach.clean(data["name"])
+            item_desc = bleach.clean(data["description"])
+            item_price = bleach.clean(data["price"])
+            course = bleach.clean(data["course"])
+            new_course =bleach.clean(data["new-course"])
+            item_course = new_course if course == "OTHER" else course
+            crud.create_menu_item(r.id, item_name, item_desc, item_course, item_price)
             flash("New menu item created!")
         return redirect(url_for('restaurantMenuItem', r_id=r.id))
     else:
