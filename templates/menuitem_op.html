@@ -1,150 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "index.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+{% block rest_nav_link %}
+    <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('restaurantMenuItem', r_id=restaurant.id)}}">{{restaurant.name}}</a>
+    </li>
+{% endblock %}
 
-    <title>Restaurant App</title>
+{% block page_title %}
+    <div class="col-md-12 col-lg-12">
+        <h1 class="display-4">
+            {% if op == "add" %}
+            Add New
+            {% elif op == "edit" %}
+            Edit
+            {% else %}
+            Delete
+            {% endif %}
+            Menu Item
+        </h1>
+        <h1>{{restaurant.name}}</h1>
+        {% if op != "add" %}
+        <h2 class="mt-5">{{item.name}}</h2>
+        {% endif %}
+    </div>
+{% endblock %}
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-
-    <!-- Custom styles for this template -->
-    <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{{url_for('restaurant')}}">Restaurant App</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('restaurant')}}">Home</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{url_for('restaurantMenuItem', r_id=restaurant.id)}}">{{restaurant.name}}</a>
-                    </li>
-                </ul>
-                <form class="form-inline mt-2 mt-md-0">
-                    <a name="" id="" class="btn btn-success" href="#" role="button">Login</a>
-                </form>
+{% block page_content %}
+    <section class="col-md-9 pl-0">
+        <form class="container" method="POST">
+            {% if op == "delete" %}
+            <p class="lead">Are you sure you want to delete menu item></p>
+            <button type="submit" class="btn btn-danger" name="action" value="DELETE">Delete</button>
+            {% else %}
+            <div class="form-group">
+                <label for="item-name">{% if op == "edit" %} New {% endif %} Name</label>
+                <input type="text" class="form-control" id="item-name" aria-describedby="item-name-help"
+                    placeholder="Enter name" name="name" value="{% if op == 'edit' %}{{item.name}}{% endif %}">
+                <small id="item-name-help" class="form-text text-muted">Whats is the <em>{% if op == 'edit'
+                        %}new{% endif %} name</em> of the menu item?</small>
             </div>
-        </div>
-    </nav>
-
-    <main class="container mt-5 pt-5">
-        <div class="row">
-            <div class="col-md-12 col-lg-12">
-                <h1 class="display-4">
-                    {% if op == "add" %}
-                    Add New
-                    {% elif op == "edit" %}
-                    Edit
-                    {% else %}
-                    Delete
-                    {% endif %}
-                    Menu Item
-                </h1>
-                <h1>{{restaurant.name}}</h1>
-                {% if op != "add" %}
-                <h2 class="mt-5">{{item.name}}</h2>
-                {% endif %}
+            <div class="form-group">
+                <label for="item-price">{% if op == "edit" %} New {% endif %} Price</label>
+                <input type="text" class="form-control" id="item-price" aria-describedby="item-price-help"
+                    placeholder="Enter price" name="price" value="{% if op == 'edit' %}{{item.price}}{% endif %}">
+                <small id="item-price-help" class="form-text text-muted">Whats is the <em>{% if op == 'edit'
+                        %}new{% endif %} price</em> in dolloars ($) of the menu item?</small>
             </div>
-        </div>
-        <div class="row">
-            <section class="col-md-9 pl-0">
-                <form class="container" method="POST">
-                    {% if op == "delete" %}
-                    <p class="lead">Are you sure you want to delete menu item></p>
-                    <button type="submit" class="btn btn-danger" name="action" value="DELETE">Delete</button>
-                    {% else %}
-                    <div class="form-group">
-                        <label for="item-name">{% if op == "edit" %} New {% endif %} Name</label>
-                        <input type="text" class="form-control" id="item-name" aria-describedby="item-name-help"
-                            placeholder="Enter name" name="name" value="{% if op == 'edit' %}{{item.name}}{% endif %}">
-                        <small id="item-name-help" class="form-text text-muted">Whats is the <em>{% if op == 'edit'
-                                %}new{% endif %} name</em> of the menu item?</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="item-price">{% if op == "edit" %} New {% endif %} Price</label>
-                        <input type="text" class="form-control" id="item-price" aria-describedby="item-price-help"
-                            placeholder="Enter price" name="price" value="{% if op == 'edit' %}{{item.price}}{% endif %}">
-                        <small id="item-price-help" class="form-text text-muted">Whats is the <em>{% if op == 'edit'
-                                %}new{% endif %} price</em> in dolloars ($) of the menu item?</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="item-desc">{% if op == "edit" %} New {% endif %} Description</label>
-                        <textarea rows="3" class="form-control" id="item-desc" aria-describedby="item-desc-help"
-                            placeholder="Enter description" name="description">{% if op == 'edit' %}{{item.description}}{% endif %}</textarea>
-                        <small id="item-name-help" class="form-text text-muted">Whats is the <em>{% if op == 'edit'
-                                %}new{% endif %} description</em> of the menu item?</small>
-                    </div>
-                    <fieldset class="form-group">
-                        <p class="mt-1 mb-2">{% if op == "edit" %} New {% endif %}Course</p>
-                        <div class="border rounded p-3">
-                            {% for c in courses %}
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="course" id="{{c}}" value="{{c}}" {% if c == item.course %}checked{% endif%}>
-                                    <label class="form-check-label" for="{{c}}">
-                                        {{c}}
-                                    </label>
-                                </div>
-                            {% endfor %}
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="course" id="other-course" value="OTHER">
-                                <label class="form-check-label" for="other-course">
-                                    Other, Please specify below:
-                                </label>
-                                <input type="text" class="form-control disabled" id="other-course-name"
-                                       placeholder="Enter course name" name="new-course" disabled>
-                            </div>
+            <div class="form-group">
+                <label for="item-desc">{% if op == "edit" %} New {% endif %} Description</label>
+                <textarea rows="3" class="form-control" id="item-desc" aria-describedby="item-desc-help"
+                    placeholder="Enter description" name="description">{% if op == 'edit' %}{{item.description}}{% endif %}</textarea>
+                <small id="item-name-help" class="form-text text-muted">Whats is the <em>{% if op == 'edit'
+                        %}new{% endif %} description</em> of the menu item?</small>
+            </div>
+            <fieldset class="form-group">
+                <p class="mt-1 mb-2">{% if op == "edit" %} New {% endif %}Course</p>
+                <div class="border rounded p-3">
+                    {% for c in courses %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="course" id="{{c}}" value="{{c}}" {% if c == item.course %}checked{% endif%}>
+                            <label class="form-check-label" for="{{c}}">
+                                {{c}}
+                            </label>
                         </div>
-                    </fieldset>
+                    {% endfor %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="course" id="other-course" value="OTHER">
+                        <label class="form-check-label" for="other-course">
+                            Other, Please specify below:
+                        </label>
+                        <input type="text" class="form-control disabled" id="other-course-name"
+                               placeholder="Enter course name" name="new-course" disabled>
+                    </div>
+                </div>
+            </fieldset>
 
-                    {% if op == "add" %}
-                    <button type="submit" class="btn btn-primary" name="action" value="CREATE">Submit</button>
-                    {% else %}
-                    <button type="submit" class="btn btn-primary" name="action" value="UPDATE">Update</button>
-                    {% endif %}
-                    {% endif %}
-                    <button type="submit" class="btn btn-secondary" name="action" value="CANCEL">Cancel</button>
-                </form>
-            </section>
-        </div>
-    </main>
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script>
-        window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-    <script>
-        $("input:radio").click(()=>{
-            if ($("#other-course").prop("checked")) {
-                $("#other-course-name").prop("disabled", false);
-            } else {
-                $("#other-course-name").prop("disabled", true);
-            }
-        })
-    </script>
-</body>
-
-</html>
+            {% if op == "add" %}
+            <button type="submit" class="btn btn-primary" name="action" value="CREATE">Submit</button>
+            {% else %}
+            <button type="submit" class="btn btn-primary" name="action" value="UPDATE">Update</button>
+            {% endif %}
+            {% endif %}
+            <button type="submit" class="btn btn-secondary" name="action" value="CANCEL">Cancel</button>
+        </form>
+    </section>
+{% endblock %}

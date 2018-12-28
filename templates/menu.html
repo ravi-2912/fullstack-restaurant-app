@@ -1,124 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "index.html" %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+{% block rest_nav_link %}
+    <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('restaurantMenuItem', r_id=restaurant.id)}}">{{restaurant.name}}</a>
+    </li>
+{% endblock %}
 
-    <title>Restaurant App</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-
-    <!-- Custom styles for this template -->
-    <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{{url_for('restaurant')}}">Restaurant App</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('restaurant')}}">Home</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{{url_for('restaurantMenuItem', r_id=restaurant.id)}}">{{restaurant.name}}</a>
-                    </li>
-                </ul>
-                <form class="form-inline mt-2 mt-md-0">
-                    <a name="" id="" class="btn btn-success" href="#" role="button">Login</a>
-                </form>
-            </div>
-        </div>
-    </nav>
-
-    <div class="list-group-item-success container-fluid flash-message">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    {% with msg = get_flashed_messages() %}
-                        {% for m in msg %}
-                            <small>{{m}}</small>
-                        {% endfor %}
-                    {% endwith %}
-                </div>
-            </div>
-        </div>
+{% block page_title %}
+    <div class="col-md-12 col-lg-6">
+        <h1 class="display-4">{{restaurant.name}}</h1>
     </div>
+    <div class="col-md-6 col-lg-3 add-new-link my-auto">
+            <a name="add-new-item" id="add-new-item" class="btn btn-primary btn-lg btn-block" href="{{url_for('newMenuItem', r_id=restaurant.id)}}" role="button">Add New</a>
+    </div>
+{% endblock %}
 
-    <main class="container mt-5 pt-5">
-        <div class="row mb-4">
-            <div class="col-md-12 col-lg-6">
-                <h1 class="display-4">{{restaurant.name}}</h1>
-            </div>
-            <div class="col-md-6 col-lg-3 add-new-link my-auto">
-                    <a name="add-new-item" id="add-new-item" class="btn btn-primary btn-lg btn-block" href="{{url_for('newMenuItem', r_id=restaurant.id)}}" role="button">Add New</a>
-            </div>
-        </div>
-        <div class="row">
-            <section class="col-md-12 pl-0">
-                <div class="container">
-                    {% for c in courses %}
+{% block page_content %}
+    <section class="col-md-12 pl-0">
+        <div class="container">
+            {% for c in courses %}
+                <div class="row">
+                    <div class="col-12">
+                        <h3>{{c}}</h3>
+                    </div>
+                </div>
+                {% for i in items %}
+                    {% if i.course == c %}
                         <div class="row">
-                            <div class="col-12">
-                                <h3>{{c}}</h3>
+                            <div class="col-md-12 col-lg-7">
+                                <p>
+                                    <span class="font-weight-bold">
+                                        {{i.name}}
+                                    </span>
+                                    <br>
+                                    <span class="font-italic">
+                                        {{i.description}}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-12 col-lg-2 text-right">
+                                {{i.price}}
+                            </div>
+                            <div class="col-md-12 col-lg-3 text-right">
+                                <a name="edit_button" id="edit_button" class="btn btn-warning" href="{{url_for('editMenuItem', r_id=restaurant.id, m_id=i.id)}}"
+                                    role="button">Edit</a>
+                                <a name="delete_button" id="delete_button" class="btn btn-danger" href="{{url_for('deleteMenuItem', r_id=restaurant.id, m_id=i.id)}}"
+                                    role="button">Delete</a>
                             </div>
                         </div>
-                        {% for i in items %}
-                            {% if i.course == c %}
-                                <div class="row">
-                                    <div class="col-md-12 col-lg-7">
-                                        <p>
-                                            <span class="font-weight-bold">
-                                                {{i.name}}
-                                            </span>
-                                            <br>
-                                            <span class="font-italic">
-                                                {{i.description}}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div class="col-md-12 col-lg-2 text-right">
-                                        {{i.price}}
-                                    </div>
-                                    <div class="col-md-12 col-lg-3 text-right">
-                                        <a name="edit_button" id="edit_button" class="btn btn-warning" href="{{url_for('editMenuItem', r_id=restaurant.id, m_id=i.id)}}"
-                                            role="button">Edit</a>
-                                        <a name="delete_button" id="delete_button" class="btn btn-danger" href="{{url_for('deleteMenuItem', r_id=restaurant.id, m_id=i.id)}}"
-                                            role="button">Delete</a>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-            </section>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
         </div>
-    </main>
+    </section>
+{% endblock %}
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script>
-        window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-</body>
-
-</html>
