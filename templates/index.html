@@ -15,6 +15,9 @@
 
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
+
+    {% block preloads %} {% endblock %}
+
 </head>
 
 <body>
@@ -32,9 +35,11 @@
                     </li>
                     {% block rest_nav_link %} {% endblock %}
                 </ul>
-                <form class="form-inline mt-2 mt-md-0">
-                    <a name="" id="" class="btn btn-success" href="#" role="button">Login</a>
-                </form>
+                {% block nav_form %}
+                    <form class="form-inline mt-2 mt-md-0">
+                        <a name="" id="" class="btn btn-success" href="{{url_for('showLogin')}}" role="button">Login</a>
+                    </form>
+                {% endblock %}
             </div>
         </div>
     </nav>
