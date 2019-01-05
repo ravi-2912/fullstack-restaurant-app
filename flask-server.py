@@ -15,6 +15,15 @@ import httplib2, json, requests
 app = Flask(__name__)
 crud = RestaurantCRUD()
 #
+
+@app.route("/login", methods=["GET", "POST"])
+def showLogin():
+    state = "".join(random.choice(string.ascii_letters + string.digits) for x in range(32))
+    login_session["state"] = state
+    data = request.form
+    if request.method == "POST":
+        return redirect(url_for("restaurant"))
+    return render_template("login.html", STATE=state)
 @app.route("/")
 @app.route("/restaurant")
 def restaurant():
