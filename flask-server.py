@@ -4,6 +4,14 @@ from restaurant_crud import RestaurantCRUD
 from flask import Flask, render_template, request, url_for, redirect, jsonify, flash
 import bleach
 
+# Oauth2 imports
+from flask import session as login_session
+from flask import make_response
+import string, random
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2, json, requests
+
 app = Flask(__name__)
 crud = RestaurantCRUD()
 #
