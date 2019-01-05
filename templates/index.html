@@ -37,7 +37,11 @@
                 </ul>
                 {% block nav_form %}
                     <form class="form-inline mt-2 mt-md-0">
-                        <a name="" id="" class="btn btn-success" href="{{url_for('showLogin')}}" role="button">Login</a>
+                        {% if "username" not in session %}
+                            <a name="" id="" class="btn btn-success" href="{{url_for('showLogin')}}" role="button">Login</a>
+                        {% else %}
+                            <a name="" id="" class="btn btn-dark" href="{{url_for('disconnect')}}" role="button">Logout</a>
+                        {% endif %}
                     </form>
                 {% endblock %}
             </div>
