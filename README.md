@@ -42,9 +42,9 @@ Following dependencies are required
 ### Todos
 
 * OAuth
-* Finish README
 * Cookies
-* Multi thread SQL issue
+* User passwords
+* Demonstrate above in another project
 
 #### Bugs
 
