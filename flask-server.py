@@ -430,4 +430,4 @@ if __name__ == "__main__":
     app.secret_key = "super secret key"
     # debug mode
     app.debug = True
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="127.0.0.1", port=8000)
