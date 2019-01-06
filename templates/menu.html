@@ -11,7 +11,9 @@
         <h1 class="display-4">{{restaurant.name}}</h1>
     </div>
     <div class="col-md-6 col-lg-3 add-new-link my-auto">
-            <a name="add-new-item" id="add-new-item" class="btn btn-primary btn-lg btn-block" href="{{url_for('newMenuItem', r_id=restaurant.id)}}" role="button">Add New</a>
+        {% if "username" in session %}
+        <a name="add-new-item" id="add-new-item" class="btn btn-primary btn-lg btn-block" href="{{url_for('newMenuItem', r_id=restaurant.id)}}" role="button">Add New</a>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -42,10 +44,12 @@
                                 {{i.price}}
                             </div>
                             <div class="col-md-12 col-lg-3 text-right">
+                                {% if "username" in session %}
                                 <a name="edit_button" id="edit_button" class="btn btn-warning" href="{{url_for('editMenuItem', r_id=restaurant.id, m_id=i.id)}}"
                                     role="button">Edit</a>
                                 <a name="delete_button" id="delete_button" class="btn btn-danger" href="{{url_for('deleteMenuItem', r_id=restaurant.id, m_id=i.id)}}"
                                     role="button">Delete</a>
+                                {% endif %}
                             </div>
                         </div>
                     {% endif %}
