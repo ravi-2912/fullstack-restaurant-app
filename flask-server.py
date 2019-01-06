@@ -271,9 +271,11 @@ def newRestaurant():
 
 @app.route("/restaurant/<int:r_id>/edit", methods=["GET", "POST"])
 def editRestaurant(r_id):
+    if "username" not in login_session:
+        return redirect("/login")
+
     if request.method == "POST":
         data = request.form
-
         # check which button is clicked - either UPDATE or CANCEL
         if data["action"] == "UPDATE":
             rest_data = bleach.clean(data["name"])
@@ -287,14 +289,17 @@ def editRestaurant(r_id):
 
 @app.route("/restaurant/<int:r_id>/delete", methods=["GET", "POST"])
 def deleteRestaurant(r_id):
+    if "username" not in login_session:
+        return redirect("/login")
+
     if request.method == "POST":
         data = request.form
 
         # check which button is clicked - either DELETE or CANCEL
         if data["action"] == "DELETE":
-            name = crud.get_restaurant(r_id)
+            r = crud.get_restaurant(r_id)
             crud.delete_restaurant(r_id)
-            flash("Restaurant {} Deleted!".format(name))
+            flash("Restaurant {} Deleted!".format(r.name))
 
         return redirect(url_for('restaurant'))
     else:
@@ -320,6 +325,9 @@ def restaurantMenuItem(r_id):
 
 @app.route("/restaurant/<int:r_id>/<int:m_id>/edit", methods=["GET", "POST"])
 def editMenuItem(r_id, m_id):
+    if "username" not in login_session:
+        return redirect("/login")
+
     r = crud.get_restaurant(r_id)
     m = crud.get_menu_item(r.id, m_id)
     m_all = crud.get_rest_menu_items(r_id)
@@ -354,6 +362,9 @@ def editMenuItem(r_id, m_id):
 
 @app.route("/restaurant/<int:r_id>/<int:m_id>/delete", methods=["GET", "POST"])
 def deleteMenuItem(r_id, m_id):
+    if "username" not in login_session:
+        return redirect("/login")
+
     r = crud.get_restaurant(r_id)
     m = crud.get_menu_item(r.id, m_id)
     if request.method == "POST":
@@ -367,6 +378,9 @@ def deleteMenuItem(r_id, m_id):
 
 @app.route("/restaurant/<int:r_id>/new", methods=["GET", "POST"])
 def newMenuItem(r_id):
+    if "username" not in login_session:
+        return redirect("/login")
+
     r = crud.get_restaurant(r_id)
     m = crud.get_rest_menu_items(r_id)
 
