@@ -6,3 +6,5 @@ static/*
 restaurantmenu.db-journal
 .vscode
 .vscode/*
+client_secrets.json
+fb_client_secrets.json
