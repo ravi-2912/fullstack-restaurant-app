@@ -14,7 +14,12 @@ import httplib2, json, requests
 
 app = Flask(__name__)
 crud = RestaurantCRUD()
-#
+
+
+CLIENT_ID = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_id']
+APPLICATION_NAME = "Restaurant Menu Application"
+
 
 @app.route("/login", methods=["GET", "POST"])
 def showLogin():
