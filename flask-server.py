@@ -187,14 +187,70 @@ def fbconnect():
 
     flash("Now logged in as %s" % login_session['username'])
     return jsonify(output={"body": output})
+
+def gdisconnect():
+    # Only disconnect a connected user.
+    access_token = login_session.get('access_token')
+    if access_token is None:
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    if result['status'] == '200':
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        response = make_response(json.dumps('Failed to revoke token for given user.'))#, 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+def fbdisconnect():
+    facebook_id = login_session['facebook_id']
+    # The access token must me included to successfully logout
+    access_token = login_session['access_token']
+    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'DELETE')[1]
+    return "you have been logged out"
+
+# Disconnect based on provider
+@app.route('/disconnect')
+def disconnect():
+    print(login_session)
+    if 'provider' in login_session:
+        if login_session['provider'] == 'google':
+            gdisconnect()
+            del login_session['gplus_id']
+            del login_session['access_token']
+        if login_session['provider'] == 'facebook':
+            fbdisconnect()
+            del login_session['facebook_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        del login_session['user_id']
+        del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('restaurant'))
+    else:
+        flash("You are not logged in")
+        return redirect(url_for('restaurant'))
+
 @app.route("/")
 @app.route("/restaurant")
 def restaurant():
     restaurants = crud.get_all_restaurants()
-    return render_template("restaurant.html", restaurants=restaurants)
+    return render_template("restaurant.html", restaurants=restaurants, session=login_session)
 
 @app.route("/restaurant/new", methods=["GET", "POST"])
 def newRestaurant():
+    if "username" not in login_session:
+        return redirect("/login")
+
     if request.method == "POST":
         # store form data
         data = request.form
