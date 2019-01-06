@@ -8,11 +8,13 @@
         <h1 class="display-4">All Restaurants</h1>
     </div>
     <div class="col-md-6 col-lg-3 add-new-link my-auto">
+        {% if "username" in session %}
         <a  name="add-new-rest"
             id="add-new-rest"
             class="btn btn-primary btn-lg btn-block"
             href="{{url_for('newRestaurant')}}"
             role="button">Add New</a>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -27,11 +29,13 @@
                     </a>
 
                     <div class="card-body">
-                        <h5 class="card-title">{{r.name}}</h5>
+                        <h5 class="card-title">{{r.name|safe}}</h5>
                         <!--p class="card-text">Some quick example text to build on the card title and make up the bulk of the
                             card's content.</p-->
+                        {% if "username" in session %}
                         <a href="{{url_for('editRestaurant', r_id=r.id)}}" class="btn btn-warning">Edit</a>
                         <a href="{{url_for('deleteRestaurant', r_id=r.id)}}" class="btn btn-danger">Delete</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
